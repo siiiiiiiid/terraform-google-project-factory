@@ -40,6 +40,11 @@ gcloud config list
 gcloud auth login
 ```
 
+**05 - Clone git repository**
+```
+git clone https://github.com/siiiiiiiid/terraform-google-project-factory
+```
+
 ## 2. Prepare you  GCP Project
 
 ### 2.1 Google Cloud APIs
