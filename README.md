@@ -132,7 +132,6 @@ terraform plan -out=plan.out
 ```
 terraform apply
 ```
-Attention: if you want to run multiple time the sanbox creation you will need to change the name from the configuration file variables.tf
 
 ## 7. Delete sandbox
 
