@@ -125,8 +125,8 @@ terraform plan -out=plan.out
 | Name | Description | Type | Default | Required | Example |
 |------|-------------|:----:|:-----:|:-----:|-------------|
 | billing\_account | Billing account id. | string | n/a | yes | 123123123 |
-| name | Project name, joined with prefix. | string | `"fabric-project"` | no | `"sandbox-project"` |
-| owners | Optional list of IAM-format members to set as project owners. | list(string) | `<list>` | no | user:seb@seb.com |
+| name | Project name, joined with prefix. | string | `"fabric-project"` | yes | `"sandbox-project"` |
+| owners | Optional list of IAM-format members to set as project owners. | list(string) | `<list>` | yes | ["user:seb@seb.com"] |
 | parent | Organization or folder id, in the `organizations/nnn` or `folders/nnn` format. | string | n/a | yes | organizations/seb.com | 
 | prefix | Prefix prepended to project name, uses random id by default. | string | `""` | no | sandbox
 
