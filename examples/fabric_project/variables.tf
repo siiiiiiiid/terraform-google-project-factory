@@ -28,13 +28,11 @@ variable "billing_account" {
 variable "name" {
   description = "Project name, joined with prefix."
   type        = string
-  default     = "fabric-project"
 }
 
 variable "owners" {
   description = "Optional list of IAM-format members to set as project owners."
   type        = list(string)
-  default     = []
 }
 
 variable "parent" {
