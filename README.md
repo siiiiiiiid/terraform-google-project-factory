@@ -29,7 +29,7 @@ echo "Service Account: ${SERVICE_ACCOUNT}"
 
 **03 - Setup & Verify [gcloud configurations](https://cloud.google.com/sdk/gcloud/reference/config) for the training**
 ```
-gcloud config configurations create cft-training
+gcloud config configurations create conf-sandbox
 gcloud config set project ${PROJECT_ID}
 gcloud config set account ${GCP_ACCOUNT_EMAIL}
 gcloud config list
@@ -76,7 +76,7 @@ Following the [least privilidge principle](https://cloud.google.com/blog/product
 
 #### Create Service Account
 ```
-gcloud iam service-accounts create cft-training --description="CFT Training Terraform Service Account" --display-name="CFT Training"
+gcloud iam service-accounts create conf-sandbox --description="CFT Training Terraform Service Account" --display-name="CFT Training"
 ```
 
 #### Verify Service Account
