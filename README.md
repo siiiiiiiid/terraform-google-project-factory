@@ -29,20 +29,7 @@ echo "Service Account: ${SERVICE_ACCOUNT}"
 echo "Organization: ${ORG_ID}"
 ```
 
-**03 - Setup & Verify [gcloud configurations](https://cloud.google.com/sdk/gcloud/reference/config) **
-```
-gcloud config configurations create conf-sandbox
-gcloud config set project ${PROJECT_ID}
-gcloud config set account ${GCP_ACCOUNT_EMAIL}
-gcloud config list
-```
-
-**04 - Login and authorize gcloud to access GCP with your user credential**
-```
-gcloud auth login
-```
-
-**05 - Clone git repository**
+**03 - Clone git repository**
 ```
 git clone https://github.com/siiiiiiiid/terraform-google-project-factory
 ```
@@ -72,23 +59,13 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="user:${GCP_ACCOUN
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="user:${GCP_ACCOUNT_EMAIL}" --role="roles/logging.admin"
 ```
 
-You will need add the following IAM policy binding to your organization
-* **Project Creator** roles/resourcemanager.projectCreator
-* **Billing User** roles/billing.user
-
-```
-gcloud organizations add-iam-policy-binding ${ORG_ID} --member="user:${GCP_ACCOUNT_EMAIL}" --role="roles/resourcemanager.projectCreator"
-gcloud organizations add-iam-policy-binding ${ORG_ID} --member="user:${GCP_ACCOUNT_EMAIL}" --role="roles/billing.user"
-```
-
-
 ### 2.3 Service Account
 
 Following the [least privilidge principle](https://cloud.google.com/blog/products/identity-security/dont-get-pwned-practicing-the-principle-of-least-privilege), create a separate Service Account to run Terraform with.
 
 #### Create Service Account
 ```
-gcloud iam service-accounts create conf-sandbox --description="Terraform Service Account" --display-name="Terraform Service Account"
+gcloud iam service-accounts create svc-terraform-sandbox --description="Terraform Service Account" --display-name="Terraform Service Account"
 ```
 
 #### Verify Service Account
@@ -104,6 +81,15 @@ Grant IAM roles to the Service Account
 ```
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/resourcemanager.projectIamAdmin"
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/storage.admin"
+```
+
+You will need add the following IAM policy binding to your organization
+* **Project Creator** roles/resourcemanager.projectCreator
+* **Billing User** roles/billing.user
+
+```
+gcloud organizations add-iam-policy-binding ${ORG_ID} --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/resourcemanager.projectCreator"
+gcloud organizations add-iam-policy-binding ${ORG_ID} --member="serviceAccount:${SERVICE_ACCOUNT}" --role="roles/billing.user"
 ```
 
 ## 4. Prepare Terraform Credential
@@ -127,7 +113,7 @@ export GOOGLE_CLOUD_KEYFILE_JSON="$(pwd)/terraform-sandbox.json"
 ## 5. Plan sandbox
 
 ```
-cd examples/fabric_project
+cd terraform-google-project-factory/examples/fabric_project
 terraform init
 terraform plan -out=plan.out
 ```
@@ -147,6 +133,7 @@ terraform plan -out=plan.out
 ```
 terraform apply
 ```
+Attention: if you want to run multiple time the sanbox creation you will need to change the name from the configuration file variables.tf
 
 ## 7. Delete sandbox
 
