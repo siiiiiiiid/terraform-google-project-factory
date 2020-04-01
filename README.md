@@ -11,10 +11,11 @@
 ### 1.1 Setup your environment
 
 **01 - Environment Variables**
-* Replace **YOUR_PROJECT_ID** with the [GCP Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#before_you_begin) you are using for the training
+* Replace **YOUR_PROJECT_ID** with the [GCP Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#before_you_begin)
 * Replace **YOUR_GCP_ACCOUNT_EMAIL** with your GCP account
 * **SERVICE_ACCOUNT** is the [GCP Service Account](https://cloud.google.com/iam/docs/understanding-service-accounts) to run Terraform with
 ```
+export ORG_ID=YOUR_ORG_ID
 export PROJECT_ID=YOUR_PROJECT_ID
 export GCP_ACCOUNT_EMAIL=YOUR_GCP_ACCOUNT_EMAIL
 export SERVICE_ACCOUNT=svc-terraform-sandbox@${PROJECT_ID}.iam.gserviceaccount.com
@@ -25,9 +26,10 @@ export SERVICE_ACCOUNT=svc-terraform-sandbox@${PROJECT_ID}.iam.gserviceaccount.c
 echo "Project: ${PROJECT_ID}"
 echo "GCP Account: ${GCP_ACCOUNT_EMAIL}"
 echo "Service Account: ${SERVICE_ACCOUNT}"
+echo "Organization: ${ORG_ID}"
 ```
 
-**03 - Setup & Verify [gcloud configurations](https://cloud.google.com/sdk/gcloud/reference/config) for the training**
+**03 - Setup & Verify [gcloud configurations](https://cloud.google.com/sdk/gcloud/reference/config) **
 ```
 gcloud config configurations create conf-sandbox
 gcloud config set project ${PROJECT_ID}
@@ -56,7 +58,7 @@ gcloud services enable iam.googleapis.com
 
 ### 2.2 IAM roles
 
-You will need add the following IAM policy binding to your training project
+You will need add the following IAM policy binding to your project
 * **Service Usage Admin** roles/serviceusage.serviceUsageAdmin
 * **Service Account Admin** roles/iam.serviceAccountAdmin
 * **Service Account Key Admin** roles/iam.serviceAccountKeyAdmin
@@ -70,13 +72,23 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="user:${GCP_ACCOUN
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="user:${GCP_ACCOUNT_EMAIL}" --role="roles/logging.admin"
 ```
 
+You will need add the following IAM policy binding to your organization
+* **Project Creator** roles/resourcemanager.projectCreator
+* **Billing User** roles/billing.user
+
+```
+gcloud organizations add-iam-policy-binding ${ORG_ID} --member="user:${GCP_ACCOUNT_EMAIL}" --role="roles/resourcemanager.projectCreator"
+gcloud organizations add-iam-policy-binding ${ORG_ID} --member="user:${GCP_ACCOUNT_EMAIL}" --role="roles/billing.user"
+```
+
+
 ### 2.3 Service Account
 
 Following the [least privilidge principle](https://cloud.google.com/blog/products/identity-security/dont-get-pwned-practicing-the-principle-of-least-privilege), create a separate Service Account to run Terraform with.
 
 #### Create Service Account
 ```
-gcloud iam service-accounts create conf-sandbox --description="CFT Training Terraform Service Account" --display-name="CFT Training"
+gcloud iam service-accounts create conf-sandbox --description="Terraform Service Account" --display-name="Terraform Service Account"
 ```
 
 #### Verify Service Account
